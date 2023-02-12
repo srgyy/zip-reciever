@@ -1,0 +1,4 @@
+.modal-dialog-scrollable {
+    height: 450px;
+    overflow-y: auto;
+}
