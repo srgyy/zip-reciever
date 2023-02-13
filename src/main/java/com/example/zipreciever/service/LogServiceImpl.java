@@ -1,5 +1,7 @@
 package com.example.zipreciever.service;
 
+import com.example.zipreciever.model.Person;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -15,24 +17,95 @@ public class LogServiceImpl implements LogService {
 
     List<String> filesListInDir = new ArrayList<String>();
 
+
+//    @Override
+//    public List<String> getLog(){
+//        File json = new File("/home/anon/IdeaProjects/zip-reciever/src/main/resources/people.json");
+//        ObjectMapper mapper = new ObjectMapper();
+//        List<String> list = null;
+//        try {
+//            list = mapper.readValue(json, TypeFactory.defaultInstance().constructCollectionType(List.class, String.class));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return list;
+//    }
+
     @Override
-    public String getLog() {
+    public List<Person> getLog() {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Person> personList = null;
+        File json = new File("/home/anon/IdeaProjects/zip-reciever/src/main/resources/people.json");
         try {
-            File file = new File(
-                    "/home/anon/IdeaProjects/zip-reciever/src/main/resources/log.txt");
-            BufferedReader br;
-            br = new BufferedReader(new FileReader(file));
-            StringBuilder stringBuilder = new StringBuilder();
-            String st;
-            while ((st = br.readLine()) != null) {
-                stringBuilder.append("\n" + st);
-            }
-            return stringBuilder.toString();
+            personList = mapper.readValue(
+                    json,
+                    mapper.getTypeFactory().constructCollectionType(List.class, Person.class)
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        catch(IOException e){
-                throw new RuntimeException(e);
-        }
+        return personList;
     }
+
+//    @Override
+//    public Map<String, String> getLog(){
+//        ObjectMapper mapper = new ObjectMapper();
+//        List<Person> personList = null;
+//        File json = new File("/home/anon/IdeaProjects/zip-reciever/src/main/resources/people.json");
+//        try {
+//            personList = mapper.readValue(
+//                    json,
+//                    mapper.getTypeFactory().constructCollectionType(List.class, Person.class)
+//            );
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        Map<String, String> personMap = new HashMap<>();
+//        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//
+//        personList.forEach(person -> {
+//            String key = null;
+//            String value = null;
+//            if (person.getGender().contains("Male")) key = "Male";
+//            else if (person.getGender().contains("Female")) key = "Female";
+//            else key = person.getGender();
+//            try {
+//                value = ow.writeValueAsString(person);
+//            } catch (JsonProcessingException e) {
+//                throw new RuntimeException(e);
+//            }
+//            personMap.put(key, value);
+//        });
+
+//        StringBuilder stringBuilder = new StringBuilder();
+//        personList.forEach(person -> {
+//            try {
+//                stringBuilder.append(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(person));
+//            } catch (JsonProcessingException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+//        return personMap;
+//    }
+
+//    @Override
+//    public String getLog() {
+//        try {
+//            File file = new File("/home/anon/IdeaProjects/zip-reciever/src/main/resources/log.txt");
+//            BufferedReader br;
+//            br = new BufferedReader(new FileReader(file));
+//            StringBuilder stringBuilder = new StringBuilder();
+//            String st;
+//            while ((st = br.readLine()) != null) {
+//                stringBuilder.append("\n" + st);
+//            }
+//            return stringBuilder.toString();
+//        }
+//        catch(IOException e){
+//                throw new RuntimeException(e);
+//        }
+//    }
         @Override
         public void getLogsAsZip (OutputStream outputStream){
             try {

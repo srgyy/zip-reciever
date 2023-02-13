@@ -18,7 +18,7 @@ public class MainController {
     @GetMapping
     public String home(Model model){
         model.addAttribute("log", logService.getLog());
-        return "home";
+        return "table";
     }
 
     @RequestMapping(value = "/zip", produces = "application/zip")
